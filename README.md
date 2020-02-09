@@ -1,12 +1,16 @@
-# GBLPYAPI
-The official API wrapper for glennbotlist.xyz in Python
+# gblapi.py - The official PY API Wrapper for the GBL API
 
-[Glenn Bot List](https://glennbotlist.xyz)
+# About
+This is the **official** api wrapper for GlennBotList.xyz written in PY, and published to [Pypi](https://pypi.org/project/gblpyapi/)
 
-[Pypi](https://pypi.org/project/gblpyapi/)
+# Installation
+To install **gblapi.py** run this command in a terminal:
 
-## Installation
-``pip install gblpyapi``
+> Install gblapi.py:
+>
+>```
+>pip install gblpyapi
+>```
 
 ## Features
 Funtion  | Action
@@ -28,5 +32,11 @@ async def postservers(self):
     await self.gbl.post_server_count(self.bot.user.id, len(self.bot.guilds))
 
 ```
+
+# Authors
+> Made by `CoderLamar420#0981`
+
+# Help
+> Join our [Discord Server](https://glennbotlist.xyz/discord) for help on this module.
 
 
