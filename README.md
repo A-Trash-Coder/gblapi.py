@@ -1,5 +1,7 @@
 # gblapi.py - The official PY API Wrapper for the GBL API
 
+![PyPI](https://img.shields.io/pypi/v/gblpyapi?logoColor=237289DA)
+
 # About
 This is the **official** api wrapper for GlennBotList.xyz written in PY, and published to [Pypi](https://pypi.org/project/gblpyapi/)
 
@@ -17,6 +19,7 @@ Funtion  | Action
 ------------- | -------------
 post_server_count(botid, guilds) (note: requires authentication) | POST Server Count 
 get_user_info(userid) | GET User Info
+get_has_voted(userid) (note: required authentication) | GET If a user has voted
 get_bot_votes(botid) (note: requires authentication) | GET Bot Votes
 get_bot_stats(botid) | GET Bot Stats
 
@@ -75,6 +78,20 @@ gbl = GBL.GBL()
 async def userinfo(self, ctx, userid: int):
     info = await self.gbl.get_bot_info(userid)
     await ctx.send(info['username']) # User Name
+
+```
+## Get User Has Voted
+
+```python
+import discord
+import glennbotlist.GBL as GBL
+
+gbl = GBL.GBL(token) # glenbotlist.xyz API token
+
+@commands.command()
+async def voted(self, ctx, userid: int):
+    voted = await self.gbl.get_has_voted(self.bot.id, userid)
+    await ctx.send(voted) # Boolean
 
 ```
 

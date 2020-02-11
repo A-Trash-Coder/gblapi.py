@@ -17,6 +17,8 @@ class GBL:
         """This function is a coroutine.
 
         POST bots stats
+        
+        Requires authorization
 
         """
         if self.token is None:
@@ -53,6 +55,8 @@ class GBL:
         """This function is a coroutine.
 
         GET bots votes
+        
+        Requires authorization
 
         Returns
         =======
@@ -89,3 +93,27 @@ class GBL:
                 raise errors.Not200("The user id is incorrect or another error has occured")
             else:
                 return resp
+
+    async def get_has_voted(self, botid: int, userid: int):
+        """This function is a coroutine.
+
+        GET wether a user has voted or not
+        
+        Requires authorization
+
+        Returns
+        =======
+
+        users vote: Boolean
+
+        """
+        if self.token is None:
+            raise errors.InvalidKey("A token was not supplied")
+
+        async with self.session.get(url=self.base + f"bot/{botid}/votes", headers={"authorization": self.token}) as r:
+            resp = await r.json()
+            if resp['code'] != 200:
+                raise errors.Not200("The bot id or token is incorrect or another error has occured")
+            else:
+                current = resp['current_votes']['current_users']
+                return f"{userid}" in current
