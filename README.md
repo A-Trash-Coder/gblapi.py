@@ -43,6 +43,7 @@ async def postservers(self):
 ```python
 import discord
 import glennbotlist.GBL as GBL
+from discord.ext import commands
 
 gbl = GBL.GBL()
 
@@ -57,6 +58,7 @@ async def botinfo(self, ctx, botid: int):
 ```python
 import discord
 import glennbotlist.GBL as GBL
+from discord.ext import commands
 
 gbl = GBL.GBL(token) # glenbotlist.xyz API token
 
@@ -71,6 +73,7 @@ async def botvotes(self, ctx):
 ```python
 import discord
 import glennbotlist.GBL as GBL
+from discord.ext import commands
 
 gbl = GBL.GBL()
 
@@ -85,6 +88,7 @@ async def userinfo(self, ctx, userid: int):
 ```python
 import discord
 import glennbotlist.GBL as GBL
+from discord.ext import commands
 
 gbl = GBL.GBL(token) # glenbotlist.xyz API token
 
