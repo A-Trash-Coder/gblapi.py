@@ -22,13 +22,13 @@ class GBL:
 
         """
         if self.token is None:
-            raise errors.InvalidKey("A token was not supplied")
+            raise errors.NoKey("A token was not supplied")
 
         async with self.session.post(url=self.base + f"bot/{botid}/stats", data={"serverCount": servers}, headers={"authorization": self.token}) as r:
             resp = await r.json()
         
         if resp['code'] != 200:
-            raise errors.Not200("You're token was incorrect or another error has occured")
+            raise errors.Not200(f"Your token was incorrect or another error has occured (Code {resp['code']})")
         else:
             print(f"Your server count of {servers} was posted successfully (Code: 200)")
 
@@ -47,7 +47,7 @@ class GBL:
         async with self.session.get(url=self.base + f"bot/{botid}") as r:
             resp = await r.json()
             if resp['code'] != 200:
-                raise errors.Not200("The bot id is incorrect or another error has occured")
+                raise errors.Not200(f"The bot id is incorrect or another error has occured (Code {resp['code']})")
             else:
                 return resp
 
@@ -66,12 +66,12 @@ class GBL:
 
         """
         if self.token is None:
-            raise errors.InvalidKey("A token was not supplied")
+            raise errors.NoKey("A token was not supplied")
 
         async with self.session.get(url=self.base + f"bot/{botid}/votes", headers={"authorization": self.token}) as r:
             resp = await r.json()
             if resp['code'] != 200:
-                raise errors.Not200("The bot id or token is incorrect or another error has occured")
+                raise errors.Not200(f"The bot id or token is incorrect or another error has occured (Code {resp['code']})")
             else:
                 return resp
 
@@ -90,7 +90,7 @@ class GBL:
         async with self.session.get(url=self.base + f"profile/{userid}") as r:
             resp = await r.json()
             if resp['code'] != 200:
-                raise errors.Not200("The user id is incorrect or another error has occured")
+                raise errors.Not200(f"The user id is incorrect or another error has occured (Code {resp['code']})")
             else:
                 return resp
 
@@ -108,12 +108,12 @@ class GBL:
 
         """
         if self.token is None:
-            raise errors.InvalidKey("A token was not supplied")
+            raise errors.NoKey("A token was not supplied")
 
         async with self.session.get(url=self.base + f"bot/{botid}/votes", headers={"authorization": self.token}) as r:
             resp = await r.json()
             if resp['code'] != 200:
-                raise errors.Not200("The bot id or token is incorrect or another error has occured")
+                raise errors.Not200(f"The bot id or token is incorrect or another error has occured (Code {resp['code']})")
             else:
                 current = resp['current_votes']['current_users']
                 return f"{userid}" in current

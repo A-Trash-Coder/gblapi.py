@@ -104,5 +104,3 @@ async def voted(self, ctx, userid: int):
 
 # Help
 > Join our [Discord Server](https://glennbotlist.xyz/discord) for help on this module.
-
-
