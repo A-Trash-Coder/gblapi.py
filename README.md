@@ -17,7 +17,7 @@ To install **gblapi.py** run this command in a terminal:
 ## Features
 Funtion  | Action
 ------------- | -------------
-post_server_count(botid, guilds) (note: requires authentication) | POST Server Count 
+post_server_count(botid, guilds, shards: optional) (note: requires authentication) | POST Server Count 
 get_user_info(userid) | GET User Info
 get_has_voted(userid) (note: required authentication) | GET If a user has voted
 get_bot_votes(botid) (note: requires authentication) | GET Bot Votes

@@ -13,7 +13,7 @@ class GBL:
         self.base = base
         self.session = aiohttp.ClientSession()
 
-    async def post_server_count(self, botid: int, servers: int):
+    async def post_server_count(self, botid: int, servers: int, shards: int=None):
         """This function is a coroutine.
 
         POST bots stats
@@ -23,8 +23,9 @@ class GBL:
         """
         if self.token is None:
             raise errors.NoKey("A token was not supplied")
-
-        async with self.session.post(url=self.base + f"bot/{botid}/stats", data={"serverCount": servers}, headers={"authorization": self.token}) as r:
+        if shards is None:
+            shards = 0
+        async with self.session.post(url=self.base + f"bot/{botid}/stats", data={"serverCount": servers, "shardCount": shards}, headers={"authorization": self.token}) as r:
             resp = await r.json()
         
         if resp['code'] != 200:
