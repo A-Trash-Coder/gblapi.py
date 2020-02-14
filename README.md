@@ -100,7 +100,7 @@ async def voted(self, ctx, userid: int):
 ```
 
 # Authors
-> Made by `CoderLamar420#0981`
+> Made by `A Trash Coder#0981`
 
 # Help
 > Join our [Discord Server](https://glennbotlist.xyz/discord) for help on this module.

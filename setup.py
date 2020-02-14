@@ -12,7 +12,7 @@ setuptools.setup(
     packages= ["glennbotlist"],
     url="https://glennbotlist.xyz",
     license="MIT",
-    author="CoderLamar420",
+    author="A Trash Coder",
     author_email="gavynlamar@gmail.com",
     description="glennbotlist.xyz API Wrapper in Python",
     long_desciption=long_desc,
