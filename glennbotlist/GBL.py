@@ -2,7 +2,7 @@ import requests
 import json
 import aiohttp
 
-from .GBL import errors
+from glennbotlist import errors
 
 class GBL:
     """
