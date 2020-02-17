@@ -118,17 +118,3 @@ class GBL:
             else:
                 current = resp['current_votes']['current_users']
                 return f"{userid}" in current
-
-    def endpoints(self):
-        return json.dumps({
-            "msg": "Sucessfull request.",
-            "code": 200,
-            "endpoints": {
-                "/ping": "GET | Pings API",
-                "/bot/:id/stats": "POST | Posts server/shard count to API",
-                "/bot/:id": "GET | Returns bot stats",
-                "/bot/:id/votes": "GET | Returns current/active votes",
-                "/profile/:id": "GET | Returns object of user information"
-            },
-            "version": "v2"
-        })
