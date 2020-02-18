@@ -6,8 +6,8 @@ with open('requirements.txt') as f:
 
 setuptools.setup(
     name="gblpyapi",
-    version="0.1.14",
-    packages= ["glennbotlist"],
+    version="0.1.15",
+    packages= ["/glennbotlist/GBL.py"],
     url="https://glennbotlist.xyz",
     license="MIT",
     author="A Trash Coder",

@@ -22,6 +22,7 @@ get_user_info(userid) | GET User Info
 get_has_voted(userid) (note: required authentication) | GET If a user has voted
 get_bot_votes(botid) (note: requires authentication) | GET Bot Votes
 get_bot_stats(botid) | GET Bot Stats
+get_vote_count(botid) | GET Bot Votes
 
 # Examples
 ## Post server count

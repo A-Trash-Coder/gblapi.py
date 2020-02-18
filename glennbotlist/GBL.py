@@ -118,3 +118,29 @@ class GBL:
             else:
                 current = resp['current_votes']['current_users']
                 return f"{userid}" in current
+
+    async def get_vote_count(self, botid: int):
+        """This function is a coroutine.
+
+        GET vote count
+        
+        Requires authorization
+
+        Returns
+        =======
+
+        votes: integer
+
+        """
+
+        if self.token is None:
+            raise errors.NoKey("A token was not supplied")
+
+        async with self.session.get(url=self.base + f"bot/{botid}/votes", headers={"authorization": self.token}) as r:
+            resp = await r.json()
+            if resp['code'] != 200:
+                raise errors.Not200(f"The bot id or token is incorrect or another error has occured (Code {resp['code']})")
+            else:
+                a = resp['current_votes']['alltime']
+                m =  len(resp['current_votes']['monthly'])
+                return {"alltime": a, "monthly": m}
