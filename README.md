@@ -32,7 +32,7 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import tasks
 
-gbl = GBL.GBL("token") # glenbotlist.xyz API token
+gbl = GBL("token") # glenbotlist.xyz API token
 
 @tasks.loop(minutes = 30) # Posts server count every 30 minutes
 async def postservers(self):
@@ -46,7 +46,7 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import commands
 
-gbl = GBL.GBL()
+gbl = GBL()
 
 @commands.command()
 async def botinfo(self, ctx, botid: int):
@@ -61,7 +61,7 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import commands
 
-gbl = GBL.GBL("token") # glenbotlist.xyz API token
+gbl = GBL("token") # glenbotlist.xyz API token
 
 @commands.command()
 async def botvotes(self, ctx):
@@ -76,7 +76,7 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import commands
 
-gbl = GBL.GBL()
+gbl = GBL()
 
 @commands.command()
 async def userinfo(self, ctx, userid: int):
@@ -91,7 +91,7 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import commands
 
-gbl = GBL.GBL("token") # glenbotlist.xyz API token
+gbl = GBL("token") # glenbotlist.xyz API token
 
 @commands.command()
 async def voted(self, ctx, userid: int):
