@@ -32,11 +32,11 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import tasks
 
-gbl = GBL.GBL(token) # glenbotlist.xyz API token
+gbl = GBL.GBL("token") # glenbotlist.xyz API token
 
 @tasks.loop(minutes = 30) # Posts server count every 30 minutes
 async def postservers(self):
-    await self.gbl.post_server_count(self.bot.user.id, len(self.bot.guilds))
+    await gbl.post_server_count(self.bot.user.id, len(self.bot.guilds))
 
 ```
 ## Get Bot Info
@@ -50,7 +50,7 @@ gbl = GBL.GBL()
 
 @commands.command()
 async def botinfo(self, ctx, botid: int):
-    info = await self.gbl.get_bot_info(botid)
+    info = await gbl.get_bot_info(botid)
     await ctx.send(info['name']) # Name
 
 ```
@@ -61,11 +61,11 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import commands
 
-gbl = GBL.GBL(token) # glenbotlist.xyz API token
+gbl = GBL.GBL("token") # glenbotlist.xyz API token
 
 @commands.command()
 async def botvotes(self, ctx):
-    votes = await self.gbl.get_bot_votes(self.bot.user.id)
+    votes = await gbl.get_bot_votes(self.bot.user.id)
     await ctx.send(votes['alltime']) # Alltime Votes
 
 ```
@@ -80,7 +80,7 @@ gbl = GBL.GBL()
 
 @commands.command()
 async def userinfo(self, ctx, userid: int):
-    info = await self.gbl.get_bot_info(userid)
+    info = await gbl.get_bot_info(userid)
     await ctx.send(info['username']) # User Name
 
 ```
@@ -91,11 +91,11 @@ import discord
 import glennbotlist.GBL as GBL
 from discord.ext import commands
 
-gbl = GBL.GBL(token) # glenbotlist.xyz API token
+gbl = GBL.GBL("token") # glenbotlist.xyz API token
 
 @commands.command()
 async def voted(self, ctx, userid: int):
-    voted = await self.gbl.get_has_voted(self.bot.id, userid)
+    voted = await gbl.get_has_voted(self.bot.id, userid)
     await ctx.send(voted) # Boolean
 
 ```
