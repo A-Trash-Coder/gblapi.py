@@ -49,8 +49,12 @@ from discord.ext import commands
 gbl = GBL()
 
 @commands.command()
-async def botinfo(self, ctx, botid: int):
-    info = await gbl.get_bot_stats(botid)
+async def botinfo(self, ctx, bot: discord.Member):
+    if not bot.bot:
+        await ctx.send("This user is not a bot!")
+        return
+
+    info = await gbl.get_bot_stats(bot.id)
     await ctx.send(info['name']) # Name
 
 ```
@@ -79,8 +83,8 @@ from discord.ext import commands
 gbl = GBL()
 
 @commands.command()
-async def userinfo(self, ctx, userid: int):
-    info = await gbl.get_user_info(userid)
+async def userinfo(self, ctx, user: discord.Member):
+    info = await gbl.get_user_info(user.id)
     await ctx.send(info['username']) # User Name
 
 ```
