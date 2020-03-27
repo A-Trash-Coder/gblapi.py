@@ -50,7 +50,7 @@ gbl = GBL()
 
 @commands.command()
 async def botinfo(self, ctx, botid: int):
-    info = await gbl.get_bot_info(botid)
+    info = await gbl.get_bot_stats(botid)
     await ctx.send(info['name']) # Name
 
 ```
@@ -80,7 +80,7 @@ gbl = GBL()
 
 @commands.command()
 async def userinfo(self, ctx, userid: int):
-    info = await gbl.get_bot_info(userid)
+    info = await gbl.get_user_info(userid)
     await ctx.send(info['username']) # User Name
 
 ```
