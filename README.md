@@ -70,6 +70,21 @@ gbl = GBL("token") # glenbotlist.xyz API token
 @commands.command()
 async def botvotes(self, ctx):
     votes = await gbl.get_bot_votes(self.bot.user.id)
+    await ctx.send(votes['current_votes']['monthly']) # People who have voted this month
+
+```
+## Get Bot Vote Count
+
+```python
+import discord
+import glennbotlist.GBL as GBL
+from discord.ext import commands
+
+gbl = GBL("token") # glenbotlist.xyz API token
+
+@commands.command()
+async def botvotecount(self, ctx):
+    votes = await gbl.get_vote_count(self.bot.user.id)
     await ctx.send(votes['alltime']) # Alltime Votes
 
 ```
