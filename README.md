@@ -19,7 +19,7 @@ To install **gblapi.py**, run this command in a terminal:
 |`fetch_has_voted(user_id)` (note: required authentication)|GET if a user has voted|
 |`fetch_bot_votes(bot_id)` (note: requires authentication)|GET bot votes|
 |`fetch_bot_stats(bot_id)`|GET bot stats|
-|`fetch_vote_count(bot_id)`|GET bot vote count|
+|`fetch_vote_count(bot_id)` (note: requires authentication)|GET bot vote count|
 
 # Examples
 
