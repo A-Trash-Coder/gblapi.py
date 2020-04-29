@@ -43,7 +43,7 @@ import discord
 from glennbotlist import GBL
 from discord.ext import commands
 
-gbl = GBL("token") # glenbotlist.xyz API token
+gbl = GBL()
 
 @commands.command()
 async def botinfo(self, ctx, user: discord.Member):
@@ -90,7 +90,7 @@ import discord
 from glennbotlist import GBL
 from discord.ext import commands
 
-gbl = GBL("token") # glenbotlist.xyz API token
+gbl = GBL()
 
 @commands.command()
 async def userinfo(self, ctx, user: discord.Member):
