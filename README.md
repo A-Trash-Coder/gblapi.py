@@ -3,7 +3,7 @@
 ![PyPI](https://img.shields.io/pypi/v/gblpyapi?logoColor=237289DA)
 
 # About
-This is the **official** api wrapper for GlennBotList.xyz written in PY, and published to [Pypi](https://pypi.org/project/gblpyapi/)
+This is the **official** api wrapper for GlennBotList.xyz written in Python, and published to [Pypi](https://pypi.org/project/gblpyapi/)
 
 # Installation
 To install **gblapi.py** run this command in a terminal:
@@ -15,7 +15,7 @@ To install **gblapi.py** run this command in a terminal:
 >```
 
 ## Features
-Funtion  | Action
+Function  | Action
 ------------- | -------------
 post_server_count(botid, guilds, shards: optional) (note: requires authentication) | POST Server Count 
 get_user_info(userid) | GET User Info
