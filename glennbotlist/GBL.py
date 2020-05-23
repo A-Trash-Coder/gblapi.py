@@ -8,7 +8,7 @@ class GBL:
     API client for Glenn Bot List in Python
     """
 
-    def __init__(self, token: str = None, *, base: str = "https://glennbotlist.xyz/api/v2/"):
+    def __init__(self, token: str = None, *, base: str = "https://glennbotlist.xyz/api/"):
         self.token = token
         self.base = base
         self.session = aiohttp.ClientSession()
@@ -28,7 +28,7 @@ class GBL:
             resp = await r.json()
 
         if resp['code'] != 200:
-            raise errors.Not200(f"Your token was incorrect or another error has occured (Code {resp['code']})")
+            raise errors.Not200(f"Your token was incorrect or another error has occurred (Code {resp['code']})")
 
         print(f"Your guild count of {guild_count} was posted successfully (Code: 200)")
 
@@ -44,11 +44,11 @@ class GBL:
             List of bot stats
 
         """
-        async with self.session.get(url=self.base + f"bot/{bot_id}") as r:
+        async with self.session.get(url=self.base + f"bot/{bot_id}/") as r:
             resp = await r.json()
 
         if resp['code'] != 200:
-            raise errors.Not200(f"The bot id is incorrect or another error has occured (Code {resp['code']})")
+            raise errors.Not200(f"The bot id is incorrect or another error has occurred (Code {resp['code']})")
 
         return resp
 
@@ -89,11 +89,11 @@ class GBL:
             List of info
 
         """
-        async with self.session.get(url=self.base + f"profile/{user_id}") as r:
+        async with self.session.get(url=self.base + f"user/{user_id}") as r:
             resp = await r.json()
 
         if resp['code'] != 200:
-            raise errors.Not200(f"The user id is incorrect or another error has occured (Code {resp['code']})")
+            raise errors.Not200(f"The user id is incorrect or another error has occurred (Code {resp['code']})")
 
         return resp
 
