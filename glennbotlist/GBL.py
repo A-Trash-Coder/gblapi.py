@@ -1,149 +1,204 @@
 import json
 import aiohttp
-
+import discord
 from glennbotlist import errors
+from glennbotlist.bot import Bot
+from glennbotlist.user import User
 
 class GBL:
     """
     API client for Glenn Bot List in Python
+
+    Parameters
+    ----------
+    bot: `discord.ext.commands.Bot or discord.Client`
+        A discord Bot or Client instance
+
+    token: `Optional[str]`
+        Your bots API key from Glenn Bot List
+
+    logging: `boolean`
+        Whether to have the glennbotlist client log for certain methods
     """
 
-    def __init__(self, token: str = None, *, base: str = "https://glennbotlist.xyz/api/"):
+    def __init__(self, bot, token: str = None, logging: bool = False):
+        self.bot = bot
         self.token = token
-        self.base = base
+        self.logging = logging
+        self.base = "https://glennbotlist.xyz/api/"
         self.session = aiohttp.ClientSession()
 
-    async def post_guild_count(self, bot_id: int, guild_count: int, shard_count: int = None):
-        """This function is a coroutine.
+    async def request(self, method, url, headers={}, data={}):
+        """This function is a coroutine
 
-        POST bot stats
+        Parameters
+        ---------
+        method: `str`
+            The request method to use
+        
+        url: `str`
+            The GBL path url
 
-        Requires authorization
+        headers: Optional[`dict`]
+            Headers to pass to the request
 
+        data: Optional[`dict`]
+            Data to pass to the request
         """
-        if self.token is None:
-            raise errors.NoKey("A token was not supplied")
-
-        async with self.session.post(url=self.base + f"bot/{bot_id}/stats", data={"serverCount": guild_count, "shardCount": shard_count or 0}, headers={"authorization": self.token}) as r:
+        async with self.session.request(method=method, url=self.base + url, headers=headers, data=data) as r:
             resp = await r.json()
-
-        if resp['code'] != 200:
-            raise errors.Not200(f"Your token was incorrect or another error has occurred (Code {resp['code']})")
-
-        print(f"Your guild count of {guild_count} was posted successfully (Code: 200)")
-
-    async def fetch_bot_stats(self, bot_id: int):
-        """This function is a coroutine.
-
-        GET bot stats
-
-        Returns
-        =======
-
-        bot stats: dict
-            List of bot stats
-
-        """
-        async with self.session.get(url=self.base + f"bot/{bot_id}/") as r:
-            resp = await r.json()
-
-        if resp['code'] != 200:
-            raise errors.Not200(f"The bot id is incorrect or another error has occurred (Code {resp['code']})")
+        
+        if resp["code"] != 200:
+            raise errors.HTTPException(f"An error occurred (HTTP Code {resp['code']})")
 
         return resp
 
-    async def fetch_bot_votes(self, bot_id: int):
+    async def post_guild_count(self):
         """This function is a coroutine.
 
-        GET bot votes
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        str
+            Returns a success message
+
+        Raises
+        ------
+        glennbotlist.NoKey
+            Raised when self.token is None
+        """
+        if self.token is None:
+            raise errors.NoKey("No API Key was passed")
+
+        await self.request("POST", f"bot/{self.bot.user.id}/stats", data={"serverCount": len(self.bot.guilds), "shardCount": self.bot.shard_count}, headers={"authorization": self.token})
+
+        if self.logging:
+            print(f"Your guild count of {len(self.bot.guilds)} and shard count of {self.bot.shard_count} was posted successfully")
+
+    async def fetch_bot_stats(self, bot_id):
+        """This function is a coroutine.
+
+        Parameters
+        ----------
+        bot_id: `int`
+            Bot to get info on
+
+        Returns
+        -------
+        glennbotlist.Bot
+            A Bot class
+            
+        Raises
+        ------
+        None
+        """
+        data = await self.request("GET", url=f"bot/{bot_id}/")
+
+        return Bot(data=data)
+
+    async def fetch_bot_votes(self):
+        """This function is a coroutine.
         
         Requires authorization
 
+        Parameters
+        ----------
+        None
+
         Returns
-        =======
+        -------
+        dict
+            Dictionary of bot votes
 
-        bot votes: dict
-            List of bot votes
-
+        Raises
+        ------
+        glennbotlist.Not200
+            Http status code of the request was not 200
         """
         if self.token is None:
-            raise errors.NoKey("A token was not supplied")
+            raise errors.NoKey("No API Key was passed")
 
-        async with self.session.get(url=self.base + f"bot/{bot_id}/votes", headers={"authorization": self.token}) as r:
-            resp = await r.json()
+        data = await self.request("GET", url=f"bot/{self.bot.user.id}/votes", headers={"authorization": self.token})
 
-        if resp['code'] != 200:
-            raise errors.Not200(f"The bot id or token is incorrect or another error has occured (Code {resp['code']})")
-
-        return resp
+        return data
 
     async def fetch_user_info(self, user_id: int):
         """This function is a coroutine.
 
-        GET user's info
+        Parameters
+        ----------
+        user_id: `int`
+            ID of the user you wish to get information on
 
         Returns
-        =======
+        ------
+        dict
+            Dictionary of user information
 
-        bot info: json
-            List of info
-
+        Raises
+        ------
+        glennbotlist.Not200
+            This is usually raised when the user is not registered on the list
         """
-        async with self.session.get(url=self.base + f"user/{user_id}") as r:
-            resp = await r.json()
+        data = await self.request("GET", url=f"user/{user_id}")
 
-        if resp['code'] != 200:
-            raise errors.Not200(f"The user id is incorrect or another error has occurred (Code {resp['code']})")
+        return User(data=data)
 
-        return resp
-
-    async def fetch_has_voted(self, bot_id: int, user_id: int):
+    async def fetch_has_voted(self, user_id: int):
         """This function is a coroutine.
-
-        GET whether a user has voted or not
 
         Requires authorization
 
+        Parameters
+        ----------
+        user_id: `int`
+            ID of the user to get whether they have voted
+
         Returns
-        =======
+        ------
+        boolean
+            Whether the user has voted for the bot
 
-        users vote: Boolean
-
+        Raises
+        ------
+        glennbotlist.NoKey
+            Raised when self.token is None
         """
         if self.token is None:
-            raise errors.NoKey("A token was not supplied")
+            raise errors.NoKey("No API Key was passed")
 
-        async with self.session.get(url=self.base + f"bot/{bot_id}/votes", headers={"authorization": self.token}) as r:
-            resp = await r.json()
-
-        if resp['code'] != 200:
-            raise errors.Not200(f"The bot id or token is incorrect or another error has occured (Code {resp['code']})")
+        resp = await self.request("GET", url=f"bot/{self.bot.user.id}/votes", headers={"authorization": self.token})
 
         current = resp['current_votes']['current_users']
         return str(user_id) in current
 
-    async def fetch_vote_count(self, bot_id: int):
+    async def fetch_vote_count(self):
         """This function is a coroutine.
-
-        GET vote count
         
         Requires authorization
 
+        Parameters
+        ----------
+        None
+
         Returns
-        =======
+        -------
+        int
+            Amount of votes the bot has received
 
-        votes: integer
-
+        Raises
+        ------
+        glennbotlist.NoKey
+            Raised when self.token is None
         """
 
         if self.token is None:
-            raise errors.NoKey("A token was not supplied")
+            raise errors.NoKey("No API Key was passed")
 
-        async with self.session.get(url=self.base + f"bot/{bot_id}/votes", headers={"authorization": self.token}) as r:
-            resp = await r.json()
-
-        if resp['code'] != 200:
-            raise errors.Not200(f"The bot id or token is incorrect or another error has occured (Code {resp['code']})")
+        resp = await self.request("GET", url=f"bot/{self.bot.user.id}/votes", headers={"authorization": self.token})
 
         a = resp['current_votes']['alltime']
         m = len(resp['current_votes']['monthly'])

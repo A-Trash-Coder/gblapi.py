@@ -1,5 +1,8 @@
 class NoKey(Exception):
     pass
 
-class Not200(Exception):
+class HTTPException(Exception):
+    pass
+
+class NotBot(Exception):
     pass

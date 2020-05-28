@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf8") as fh:
 
 setuptools.setup(
     name="gblpyapi",
-    version="0.2.2",
+    version="0.3.0",
     packages= ["glennbotlist"],
     url="https://glennbotlist.xyz",
     license="MIT",

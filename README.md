@@ -10,116 +10,93 @@ To install **gblapi.py**, run this command in a terminal:
 
 > $ pip install gblpyapi
 
-## Features
+# Features
+
+## glennbotlist.WebhookServer
+
+gblpyapi now has a webhook server! Create an instance of the WebhookServer module and pass the required parameters. Get when a user votes with the event below!
+
+|Event Name|Parameters|
+|--------|------|
+|`on_glenn_vote`|data|
+
+## glennbotlist.GBL
 
 |Method|Action|
 |--------|------|
-|`post_guild_count(bot_id, guild_count, shard_count: optional)` (note: requires authentication)|POST guild count|
+|`post_guild_count()` (note: requires authentication)|POST guild count|
 |`fetch_user_info(user_id)`|GET user info|
 |`fetch_has_voted(user_id)` (note: required authentication)|GET if a user has voted|
-|`fetch_bot_votes(bot_id)` (note: requires authentication)|GET bot votes|
+|`fetch_bot_votes()` (note: requires authentication)|GET bot votes|
 |`fetch_bot_stats(bot_id)`|GET bot stats|
-|`fetch_vote_count(bot_id)` (note: requires authentication)|GET bot vote count|
+|`fetch_vote_count()` (note: requires authentication)|GET bot vote count|
 
 # Examples
 
-## Post server count
+To easily combine all examples, all examples will be shown in a discord.ext.commands.Cog
 
 ```python
 from glennbotlist import GBL
-from discord.ext import tasks
-
-gbl = GBL("token") # glenbotlist.xyz API token
-
-@tasks.loop(minutes=30) # posts guild count every 30 minutes
-async def post_guilds(self):
-    await gbl.post_guild_count(self.bot.user.id, len(self.bot.guilds))
-```
-
-## Get Bot Info
-
-```python
+from glennbotlist import WebhookServer
 import discord
-from glennbotlist import GBL
-from discord.ext import commands
+from discord.ext import commands, tasks
 
-gbl = GBL()
+class GlennBotList(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+        self.glenn = GBL(bot=self.bot, token=config.gbl, logging=True) # Replace "GBL TOKEN" with your GBL Token. True enables logging.
+        self.server = WebhookServer(self.bot) # Initiate Webhook Server
+        self.postservers.start() # Starts the postservers task
 
-@commands.command()
-async def botinfo(self, ctx, user: discord.Member):
-    if not user.bot:
-        await ctx.send("This user is not a bot!")
-        return
+    @commands.Cog.listener()
+    async def on_glenn_vote(self, data): # Triggered whenever a user votes
+        print(data)
 
-    info = await gbl.fetch_bot_stats(user.id)
-    await ctx.send(info['name'])
-```
+    @tasks.loop(hours = 1)
+    async def postservers(self):
+        await self.glenn.post_guild_count() # Post you server count and shard count. If logging is enabled, it will print a success message
 
-## Get Bot Votes
+    @commands.command()
+    async def user_info(self, ctx, user: discord.Member):
+        if user.bot:
+            return await ctx.send("This user is not a bot")
+        
+        guser = await self.glenn.fetch_user_info(user.id) # Returns a glennbotlist.User object
+        await ctx.send(f"Name: {guser.name}. Bio: {guser.bio}") # Sends the users name and bio. For all User attributes, print the directory of glennbotlist.User
 
-```python
-from glennbotlist import GBL
-from discord.ext import commands
+    @commands.command()
+    async def has_voted(self, ctx, user: discord.Member):
+        if user.bot:
+            return await ctx.send("This user is not a bot")
+        
+        voted = await self.glenn.fetch_has_voted(user.id) # Returns a bool of whether the user has voted
+        await ctx.send(f"{user}'s vote status: {voted}")
 
-gbl = GBL("token") # glenbotlist.xyz API token
+    @commands.command()
+    async def votes(self, ctx):
+        votes = await self.glenn.fetch_bot_votes() # Gets a dict of votes
+        await ctx.send(votes)
+        
+    @commands.command()
+    async def botinfo(self, ctx, user: discord.Member):
+        if not user.bot:
+            await ctx.send("This is not a bot!")
 
-@commands.command()
-async def botvotes(self, ctx):
-    votes = await gbl.fetch_bot_votes(self.bot.user.id)
-    await ctx.send(votes['current_votes']['monthly']) # people who have voted this month
-```
+        bot = await self.glenn.fetch_bot_stats(user.id) # Returns a glennbotlist.Bot object
+        await ctx.send(f"Name: {bot.name}. Prefix: {bot.prefix}") # Sends the bots name and prefix. For all Bot attributes, print the directory of glennbotlist.Bot
 
-## Get Bot Vote Count
+    @commands.command()
+    async def vote_count(self, ctx):
+        votes = await self.glenn.fetch_vote_count() # Gets all time and monthly votes
+        await ctx.send(f"I have {votes['monthly']} votes this month!") # Sends amount of votes for the current month
 
-```python
-from glennbotlist import GBL
-from discord.ext import commands
-
-gbl = GBL("token") # glenbotlist.xyz API token
-
-@commands.command()
-async def botvotecount(self, ctx):
-    votes = await gbl.fetch_vote_count(self.bot.user.id)
-    await ctx.send(votes['alltime']) # all time votes
-```
-
-## Get User Info
-
-```python
-import discord
-from glennbotlist import GBL
-from discord.ext import commands
-
-gbl = GBL()
-
-@commands.command()
-async def userinfo(self, ctx, user: discord.Member):
-    info = await gbl.fetch_user_info(user.id)
-    await ctx.send(info['username'])
-```
-
-## Get User Has Voted
-
-```python
-import discord
-from glennbotlist import GBL
-from discord.ext import commands
-
-gbl = GBL("token") # glenbotlist.xyz API token
-
-@commands.command()
-async def voted(self, ctx, user: discord.Member):
-    if user.bot:
-        await ctx.send("This user is a bot!")
-        return
-
-    voted = await gbl.fetch_has_voted(self.bot.id, user.id)
-    await ctx.send(voted)
+def setup(bot):
+    bot.add_cog(GlennBotList(bot))
 ```
 
 # Authors
 
-Made with ❤️ by A Trash Coder#0981 and A Discord User#6130.
+Made with ❤️ by A Trash Coder#0214 and A Discord User#1173.
 
 # Help
 
