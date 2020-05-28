@@ -13,4 +13,4 @@ from collections import namedtuple
 
 VersionInfo = namedtuple('VersionInfo', 'major minor micro releaselevel serial')
 
-version_info = VersionInfo(major = 0, minor = 2, micro = 2, releaselevel = 'final', serial = 0)
+version_info = VersionInfo(major = 0, minor = 3, micro = 0, releaselevel = 'final', serial = 0)
