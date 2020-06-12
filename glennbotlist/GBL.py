@@ -73,7 +73,7 @@ class GBL:
         if self.token is None:
             raise errors.NoKey("No API Key was passed")
 
-        await self.request("POST", f"bot/{self.bot.user.id}/stats", data={"serverCount": len(self.bot.guilds), "shardCount": self.bot.shard_count}, headers={"authorization": self.token})
+        await self.request("POST", f"bot/{self.bot.user.id}/stats", data={"serverCount": len(self.bot.guilds), "shardCount": self.bot.shard_count or 0}, headers={"authorization": self.token})
 
         if self.logging:
             print(f"Your guild count of {len(self.bot.guilds)} and shard count of {self.bot.shard_count} was posted successfully")
